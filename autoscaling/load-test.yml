@@ -1,7 +1,7 @@
 config:
   # This is a test server run by team Artillery
   # It's designed to be highly scalable
-  target: http://18.192.126.213/
+  target: http://FF-Autoscaling-ASG-1-676727919.eu-central-1.elb.amazonaws.com/
   phases:
     - duration: 60
       arrivalRate: 1
