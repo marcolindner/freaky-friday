@@ -17,5 +17,14 @@ Resources:
       Tags:
         - Key: Name
           Value: Cloudformation
+  mySubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: eu-cental-1a
+      VpcId: !Ref myVPC
+      CidrBlock: 10.0.0.1/24
+      Tags:
+        - Key: name
+          Value: cloudformation
 
 # Outputs:
