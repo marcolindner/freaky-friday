@@ -49,6 +49,18 @@ Resources:
       VpcId: !Ref myVPC
       InternetGatewayId: !Ref igwName
 
+  routeTableName:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref myVPC
+      Tags:
+        - Key: name
+          Value: cloudformation
+
+
+
+
+### OUTPUTS ###
 Outputs:
   VPCid:
     Description: the VPC id
