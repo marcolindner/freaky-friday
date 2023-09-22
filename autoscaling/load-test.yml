@@ -1,7 +1,7 @@
 config:
   # This is a test server run by team Artillery
   # It's designed to be highly scalable
-  target: http://FF-Autoscaling-ASG-1-676727919.eu-central-1.elb.amazonaws.com/
+  target: http://ff-webserver-loadbalancer-1986436676.eu-central-1.elb.amazonaws.com/
   phases:
     - duration: 60
       arrivalRate: 1
@@ -11,13 +11,15 @@ config:
       arrivalRate: 5
       rampTo: 10
       name: Ramp up load
-    - duration: 30
+    - duration: 60
       arrivalRate: 10
-      rampTo: 30
+      rampTo: 20
       name: Spike phase
   # Load & configure a couple of useful plugins
   # https://docs.art/reference/extensions
   plugins:
+    faker:
+      locale: en
     ensure: {}
     apdex: {}
     metrics-by-endpoint: {}
@@ -27,9 +29,23 @@ config:
       thresholds:
         - http.response_time.p99: 100
         - http.response_time.p95: 75
+  variables:
+    firstName: "$faker.name.firstName"
+    lastName: "$faker.name.lastName"
+    phoneNumber: "$faker.phone.number"
+    eMail: "$faker.internet.email"
 scenarios:
   - flow:
-      - loop:
-        - get:
-            url: "/"
-        count: 100
+      # - loop:
+      #   - get:
+      #       url: "/rds.php"
+      #   count: 10
+      - log: "Making request with query: {{ firstName }} {{ lastName }}"
+      - post:
+          url: "/rds.php"
+          formData:
+           firstname: "{{ firstName }}"
+           lastname: "{{ lastName }}"
+           phone: "{{ phoneNumber }}"
+           email: "{{ eMail }}"
+           mode: "added"
