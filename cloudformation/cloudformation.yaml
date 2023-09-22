@@ -69,8 +69,39 @@ Resources:
       SubnetId: !Ref mySubnet2
       RouteTableId: !Ref routeTableName         
 
+  secGroupName:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: securityGroup
+      GroupDescription: Allow http
+      VpcId: !Ref myVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: name
+          Value: cloudformation
 
-
+  myEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-01342111f883d5e4e
+      InstanceType: t2.micro
+      Monitoring: false
+      SecurityGroupIds:
+        - !Ref secGroupName
+      SubnetId: !Ref mySubnet1
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install httpd -y
+        systemctl enable httpd
+        systemctl start httpd
+      Tags:
+        - Key: name
+          Value: cloudformation
 
 ### OUTPUTS ###
 Outputs:
