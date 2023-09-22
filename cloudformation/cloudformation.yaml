@@ -36,4 +36,20 @@ Resources:
         - Key: name
           Value: cloudformation
 
-# Outputs:
+  igwName:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: name
+          Value: cloudformation
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref myVPC
+      InternetGatewayId: !Ref igwName
+
+Outputs:
+  VPCid:
+    Description: the VPC id
+    Value: !Ref myVPC
